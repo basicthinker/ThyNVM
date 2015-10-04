@@ -26,3 +26,7 @@
 *.exe
 *.out
 *.app
+
+.hg/
+.hgignore
+.hgtags

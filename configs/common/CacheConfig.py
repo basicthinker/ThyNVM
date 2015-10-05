@@ -1,4 +1,5 @@
 # Copyright (c) 2012-2013, 2015 ARM Limited
+# Copyright (c) 2015 Jinglei Ren <jinglei.ren@persper.com>
 # All rights reserved
 # 
 # The license below extends only to copyright in the software and shall
@@ -63,13 +64,22 @@ def config_cache(options, system):
         dcache_class, icache_class, l2_cache_class = \
             O3_ARM_v7a_DCache, O3_ARM_v7a_ICache, O3_ARM_v7aL2
     else:
-        dcache_class, icache_class, l2_cache_class = \
-            L1Cache, L1Cache, L2Cache
+        dcache_class, icache_class, l2_cache_class, l3_cache_class = \
+            L1Cache, L1Cache, L2Cache, L3Cache
 
     # Set the cache line size of the system
     system.cache_line_size = options.cacheline_size
 
-    if options.l2cache:
+    if options.l3cache:
+        system.l3 = l3_cache_class(clk_domain=system.cpu_clk_domain,
+                                   size=options.l3_size,
+                                   assoc=options.l3_assoc)
+        # We can reuse the L2 crossbar class.
+        system.tol3bus = L2XBar(clk_domain = system.cpu_clk_domain)
+        system.l3.cpu_side = system.tol3bus.master
+        system.l3.mem_side = system.membus.slave
+
+    elif options.l2cache:
         # Provide a clock for the L2 and the L1-to-L2 bus here as they
         # are not connected using addTwoLevelCacheHierarchy. Use the
         # same clock as the CPUs.
@@ -109,9 +119,17 @@ def config_cache(options, system):
             # When connecting the caches, the clock is also inherited
             # from the CPU in question
             if buildEnv['TARGET_ISA'] == 'x86':
-                system.cpu[i].addPrivateSplitL1Caches(icache, dcache,
-                                                      PageTableWalkerCache(),
-                                                      PageTableWalkerCache())
+                iwc = PageTableWalkerCache()
+                dwc = PageTableWalkerCache()
+                if options.l3cache:
+                    l2c = l2_cache_class(clk_domain=system.cpu_clk_domain,
+                                         size=options.l2_size,
+                                         assoc=options.l2_assoc)
+                    system.cpu[i].addTwoLevelCacheHierarchy(icache, dcache,
+                                                            l2c, iwc, dwc)
+                else:
+                    system.cpu[i].addPrivateSplitL1Caches(icache, dcache,
+                                                          iwc, dwc)
             else:
                 system.cpu[i].addPrivateSplitL1Caches(icache, dcache)
 
@@ -139,7 +157,9 @@ def config_cache(options, system):
                         ExternalCache("cpu%d.dcache" % i))
 
         system.cpu[i].createInterruptController()
-        if options.l2cache:
+        if options.l3cache:
+            system.cpu[i].connectAllPorts(system.tol3bus, system.membus)
+        elif options.l2cache:
             system.cpu[i].connectAllPorts(system.tol2bus, system.membus)
         elif options.external_memory_system:
             system.cpu[i].connectUncachedPorts(system.membus)

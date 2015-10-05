@@ -95,7 +95,7 @@ def addCommonOptions(parser):
     parser.add_option("--mem-ranks", type="int", default=None,
                       help = "number of memory ranks per channel")
     parser.add_option("--mem-size", action="store", type="string",
-                      default="512MB",
+                      default="8GB",
                       help="Specify the physical memory size (single memory)")
 
     parser.add_option("-l", "--lpae", action="store_true")
@@ -108,14 +108,15 @@ def addCommonOptions(parser):
                       help="use external ports of this port_type for caches")
     parser.add_option("--caches", action="store_true")
     parser.add_option("--l2cache", action="store_true")
+    parser.add_option("--l3cache", action="store_true")
     parser.add_option("--fastmem", action="store_true")
     parser.add_option("--num-dirs", type="int", default=1)
     parser.add_option("--num-l2caches", type="int", default=1)
     parser.add_option("--num-l3caches", type="int", default=1)
-    parser.add_option("--l1d_size", type="string", default="64kB")
+    parser.add_option("--l1d_size", type="string", default="32kB")
     parser.add_option("--l1i_size", type="string", default="32kB")
-    parser.add_option("--l2_size", type="string", default="2MB")
-    parser.add_option("--l3_size", type="string", default="16MB")
+    parser.add_option("--l2_size", type="string", default="256kB")
+    parser.add_option("--l3_size", type="string", default="2MB")
     parser.add_option("--l1d_assoc", type="int", default=2)
     parser.add_option("--l1i_assoc", type="int", default=2)
     parser.add_option("--l2_assoc", type="int", default=8)

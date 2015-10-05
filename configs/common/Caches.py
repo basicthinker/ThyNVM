@@ -1,4 +1,5 @@
 # Copyright (c) 2012 ARM Limited
+# Copyright (c) 2015 Jinglei Ren <jinglei.ren@persper.com>
 # All rights reserved.
 #
 # The license below extends only to copyright in the software and shall
@@ -47,20 +48,29 @@ from m5.objects import *
 # specific instantiations.
 
 class L1Cache(BaseCache):
-    assoc = 2
+    assoc = 8
     hit_latency = 2
     response_latency = 2
-    mshrs = 4
-    tgts_per_mshr = 20
+    mshrs = 16
+    tgts_per_mshr = 8
+    write_buffers = 16
     is_top_level = True
 
 class L2Cache(BaseCache):
     assoc = 8
-    hit_latency = 20
-    response_latency = 20
-    mshrs = 20
-    tgts_per_mshr = 12
-    write_buffers = 8
+    hit_latency = 6
+    response_latency = 6
+    mshrs = 64
+    tgts_per_mshr = 8
+    write_buffers = 64
+
+class L3Cache(BaseCache):
+    assoc = 16
+    hit_latency = 14
+    response_latency = 14
+    mshrs = 256
+    tgts_per_mshr = 8
+    write_buffers = 256
 
 class IOCache(BaseCache):
     assoc = 8
@@ -78,6 +88,6 @@ class PageTableWalkerCache(BaseCache):
     response_latency = 2
     mshrs = 10
     size = '1kB'
-    tgts_per_mshr = 12
+    tgts_per_mshr = 8
     forward_snoops = False
     is_top_level = True

@@ -27,6 +27,16 @@
 *.out
 *.app
 
+# THNVM
 .hg/
 .hgignore
 .hgtags
+
+.cproject
+.project
+.settings/
+
+build/
+*.pyc
+parsetab.py
+

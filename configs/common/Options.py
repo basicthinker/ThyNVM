@@ -297,3 +297,19 @@ def addFSOptions(parser):
     parser.add_option("--command-line-file", action="store",
                       default=None, type="string",
                       help="File with a template for the kernel command line")
+
+def addTHNVMOptions(parser):
+    parser.add_option("--dram-type", type="choice", default="DDR3_1600_x64",
+                      choices=MemConfig.mem_names(),
+                      help = "type of DRAM to use")
+    parser.add_option("--nvm-type", type="choice", default="DDR3_1600_x64_PCM",
+                      choices=MemConfig.mem_names(),
+                      help = "type of NVM to use")
+    parser.add_option("--block-bits", type="int", default=6,
+            help="number of bits of a block in the block remapping scheme")
+    parser.add_option("--page-bits", type="int", default=12,
+            help="number of bits of a page in the page writeback scheme")
+    parser.add_option("--btt-length", type="int", default=0,
+                      help="number of BTT entries")
+    parser.add_option("--ptt-length", type="int", default=0,
+                      help="number of PTT entries")

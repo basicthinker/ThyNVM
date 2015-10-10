@@ -152,3 +152,13 @@ class IOXBar(NoncoherentXBar):
     frontend_latency = 2
     forward_latency = 1
     response_latency = 2
+
+# For logic connections. We can use this to organize components.
+class VirtualXBar(NoncoherentXBar):
+    # 128-bit crossbar by default
+    width = 16
+
+    # Assume no latency. Only for connection purpose.
+    frontend_latency = 0
+    forward_latency = 0
+    response_latency = 0

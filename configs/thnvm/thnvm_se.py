@@ -1,4 +1,5 @@
 # Copyright (c) 2012-2013 ARM Limited
+# Copyright (c) 2015 Jinglei Ren <jinglei.ren@persper.com>
 # All rights reserved.
 #
 # The license below extends only to copyright in the software and shall
@@ -58,7 +59,7 @@ import Options
 import Ruby
 import Simulation
 import CacheConfig
-import MemConfig
+import HybridMemConfig
 from Caches import *
 from cpu2000 import *
 
@@ -123,6 +124,7 @@ def get_processes(options):
 parser = optparse.OptionParser()
 Options.addCommonOptions(parser)
 Options.addSEOptions(parser)
+Options.addTHNVMOptions(parser)
 
 if '--ruby' in sys.argv:
     Ruby.define_options(parser)
@@ -268,11 +270,10 @@ if options.ruby:
             system.cpu[i].itb.walker.port = ruby_port.slave
             system.cpu[i].dtb.walker.port = ruby_port.slave
 else:
-    MemClass = Simulation.setMemClass(options)
     system.membus = SystemXBar()
     system.system_port = system.membus.slave
     CacheConfig.config_cache(options, system)
-    MemConfig.config_mem(options, system)
+    HybridMemConfig.config_hybrid_mem(options, system)
 
 root = Root(full_system = False, system = system)
 Simulation.run(options, root, system, FutureClass)

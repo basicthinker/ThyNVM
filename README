@@ -1,3 +1,22 @@
+Transparent Hybrid Non-Volatile Memory (ThyNVM)
+
+A gem5-based simulator of a memory controller for the DRAM+NVM hybrid
+architecture. ThyNVM supports software-transparent crash consistency via an
+efficient dual-scheme checkpointing mechanism.
+
+For more information about ThyNVM, please visit: http://persper.com/thynvm. Our
+paper, documents and slides demonstrate advantages of and describe the details
+of the design of ThyNVM. 
+
+NOTE: The code is being ported to the latest gem5 version. This repository is
+under construction. Please stay tuned for the new version of ThyNVM.
+
+Before the repository is ready, you may refer to my old code: https://github.com/basicthinker/Sexain-MemController.
+
+Below is the original README of gem5.
+
+==========
+
 This is the gem5 simulator.
 
 The main website can be found at http://www.gem5.org
